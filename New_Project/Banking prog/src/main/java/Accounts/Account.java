@@ -147,9 +147,9 @@ public class Account {
 				Admin makeEmployee = new Admin();
 				makeEmployee.deleteUser(state);
 			}
-			else
+			else if (choice.equalsIgnoreCase("quit"))
 			{
-				System.out.println("incorrect choice");
+				System.out.println("logging out, goodbye.");
 			}
 			
 	}

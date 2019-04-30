@@ -27,7 +27,7 @@ public class JointAccount extends Account {
 			
 			try {
 				ResultSet ID = state.executeQuery("insert into users(uid, name,pass,status) "
-				+ "values (DEFAULT,"+ "'" + User1 + "'" + "," + "'" +Pass1 + "'"+ "," + "'"+ super.Approval +"'" + ")"+ "returning uid");
+				+ "values (DEFAULT,"+ "'" + User1 + "'" + "," + "'" +Pass1 + "'"+ "," + "'pending'" + ")"+ "returning uid");
 				if (ID.next())
 				{
 					UID1 = ID.getInt("UID");
@@ -35,7 +35,7 @@ public class JointAccount extends Account {
 				
 				
 				ID = state.executeQuery("insert into users(uid, name,pass,status) "
-				+ "values (DEFAULT ,"+ "'" +User2 + "'" + "," + "'" +Pass2 +"'"+ "," + super.Approval + ") returning uid");
+				+ "values (DEFAULT ,"+ "'" +User2 + "'" + "," + "'" +Pass2 +"'"+ "," + "'pending'" + ") returning uid");
 				
 				if(ID.next())
 				{
@@ -53,6 +53,8 @@ public class JointAccount extends Account {
 				
 				state.execute("insert into usersaccount(uid, aid) values (" + UID1 + "," + AID + ")");
 				state.execute("insert into usersaccount(uid, aid) values (" + UID2 + "," + AID + ")");
+				
+				System.out.println("accounts created with the quickness.");
 			}
 			catch (SQLException e) {
 				// TODO Auto-generated catch block
@@ -62,7 +64,7 @@ public class JointAccount extends Account {
 		}
 		else
 		{
-			System.out.println("usernames are not unqiue, please try again");
+			System.out.println("usernames are not unique, please try again");
 		}
 		
 	}
