@@ -121,13 +121,11 @@ public class logon_creds {
 				}
 				else
 				{
-					System.out.println("the credntials that you have typed do not follow the rules that"
+					System.out.println("the credentials that you have typed do not follow the rules that"
 							+"/n i have just stated. try again kiddo.");
 					return;
 				}
 
-
-				
 			}
 			else if(Choice.equalsIgnoreCase("quit"))
 			{

@@ -9,6 +9,7 @@ import java.util.Scanner;
 
 public class Admin extends employee{
 
+	// this time baby ill be bulllllleeeeettttttppppprrrrrroooooofffffff
 	public boolean AdminToken = true;
 	
 	public Admin()
@@ -99,6 +100,7 @@ public class Admin extends employee{
 		
 		
 		Scanner S1 = new Scanner(System.in);
+		
 		
 		int accountToTransfer = S1.nextInt();
 		

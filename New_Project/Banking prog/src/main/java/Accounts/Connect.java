@@ -13,7 +13,7 @@ public class Connect
 	      Class.forName("org.postgresql.Driver");
 	      String dbName = "postgres";
 	      String userName = "postgres"; // fill in later
-	      String password = "the heckin quickness"; // save in text file
+	      String password = "the quickness"; // save in text file
 	      String hostname = "bankingapp.c3povt7bydjz.us-east-2.rds.amazonaws.com";
 	      String port = "5432";
 	      String jdbcUrl = "jdbc:postgresql://" + hostname + ":" + port + "/" + dbName + "?user=" + userName + "&password=" + password;

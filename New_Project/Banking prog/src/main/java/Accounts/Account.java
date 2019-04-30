@@ -303,7 +303,7 @@ public class Account {
 				amounts.add(AccNumbers.getDouble("amount"));
 			}
 			
-		} catch (SQLException e) {e.printStackTrace();}
+		
 		
 		Scanner S1 = new Scanner(System.in);
 		int accountToTransfer = S1.nextInt();
@@ -353,6 +353,8 @@ public class Account {
 		{
 			System.out.println("incorrect target account selected, please try again.");
 		}
+		} catch (SQLException e) {e.printStackTrace();}
+		catch(InputMismatchException i) {System.out.println("invalid input entered, returning.");}
 		
 	}
 	
