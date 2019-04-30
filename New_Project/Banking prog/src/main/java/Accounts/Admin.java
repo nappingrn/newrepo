@@ -4,6 +4,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class Admin extends employee{
@@ -16,26 +17,9 @@ public class Admin extends employee{
 	}
 	
 	
-	public void Log(String log)
-	{
-		try(FileWriter f = new FileWriter("src/logs/accounts.txt/", true); 
-				BufferedWriter b = new BufferedWriter(f); 
-				PrintWriter p = new PrintWriter(b);)
-		{
-			p.println(log);
-		} 
-		catch (IOException e) {e.printStackTrace();}
-		
-		/*
-		 * Insert into Logs values (?) (Type, User, Amount, Time);
-		 * 
-		 * */
-		
-	}
-	
-	
 	public void withdrawAdmin(Statement state)
 	{
+		try {
 		Scanner s1 = new Scanner(System.in);
 		ShowAll(state);
 		System.out.println("which account number do you want to withdraw from? : ");
@@ -43,33 +27,49 @@ public class Admin extends employee{
 		System.out.println("how much would you like to withdraw? : ");
 		double amount = s1.nextDouble();
 		
-		try {
+		
 			state.execute("update accounts set amount = amount - " + amount+ " where accountnumber = " + account);
 		} catch (SQLException e) {e.printStackTrace();}
+		catch(InputMismatchException i) {
+			System.out.println("please follow the directions and enter in valid doubles\n"
+					+ "and account numbers. returning to options menu");
+			}
 		
 	}
 	
 	
 	public void depositAdmin(Statement state)
 	{
+		try {
+			
 		Scanner s1 = new Scanner(System.in);
 		ShowAll(state);
-		System.out.println("which account do you want to deposit into? : ");
+		System.out.println("which account number do you want to deposit into? : ");
 		int account = s1.nextInt();
 		System.out.println("how much would you like to deposit? : ");
 		double amount = s1.nextDouble();
 
-		try {
+		
 			
 		if(amount>=0)
 		{
 			state.execute("update accounts set amount = amount + " + amount+ " where accountnumber = " + account);
+		}
+		else
+		{
+			System.out.println("Please dont enter negative numbers.");
+			return;
 		}
 		
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		catch(InputMismatchException i)
+		{
+			System.out.println("next time please enter a valid account number, returning to select screen");
+		}
+	
 	}
 	
 	
@@ -96,9 +96,10 @@ public class Admin extends employee{
 				amounts.add(AccNumbers.getDouble("amount"));
 			}
 			
-		} catch (SQLException e) {e.printStackTrace();}
+		
 		
 		Scanner S1 = new Scanner(System.in);
+		
 		int accountToTransfer = S1.nextInt();
 		
 		
@@ -140,46 +141,72 @@ public class Admin extends employee{
 			System.out.println("incorrect target account selected, please try again.");
 		}
 		
-		
+		} catch (SQLException e) {e.printStackTrace();}
+		catch(InputMismatchException i) {System.out.println("Please use valid credentials next time, quitting.");}
 	}
 	
 	
 	public void deleteUser(Statement state)
 	{
 		ShowAll(state);
-		System.out.println("Which user is to be deleted?: ");
+		Scanner DeletionCheck = new Scanner(System.in);
 		
-		Scanner delete = new Scanner(System.in);
+		System.out.println("which user is to be deleted out of this list? : ");
+		try {
+		String choice = DeletionCheck.next();
 		
-		String toBeDestroyed = delete.next();
 		
-		System.out.print("Are you sure you want to delete " + toBeDestroyed + " and all of their accounts? (y/n) :");
-		
-		String choice = delete.next();
-		
-		if(choice.equalsIgnoreCase("y"))
-		{
+			ResultSet data = state.executeQuery("Select * from "
+					+ "users, accounts, usersaccount where "
+					+ "users.uid = usersaccount.uid and accounts.aid = usersaccount.aid "
+					+ "and users.name = " + "'" + choice + "'");
 			
-			try {
-				ResultSet numbers = state.executeQuery("Select Accountnumber, uid, aid "
-						+ "from usersaccount, users, accounts "
-						+ "where users.uid = usersaccount.uid "
-						+ "and accounts.aid = usersaccount.aid "
-						+ " and users.name = " + "'"+ toBeDestroyed +"'");
-
-				while(numbers.next())
-				{
-					state.execute("delete from usersaccount where uid = "+ numbers.getInt("uid")  + " and aid = " + numbers.getInt("aid"));
-					state.execute("delete from accounts where accountnumber = " + numbers.getInt("accountnumber"));
-				}
+			ArrayList<Integer>numbers = new ArrayList<Integer>();
+			ArrayList<Integer>aid = new ArrayList<Integer>();
+			int uid;
+			
+			if(data.next()) // if there is a first entry
+			{
+				aid.add(data.getInt("aid")); // we can load in the first account ID
+				uid = data.getInt("uid"); // the user id will never change since its just 1 user
+				numbers.add(data.getInt("accountnumber")); // load the first accountnumber as well
 				
-				state.execute("delete from users where name = " +"'"+toBeDestroyed+"'");
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}	
+			}
+			
+			
+			while(data.next()) //load the rest of the account ids and the account numbers. (>>load the phasers)
+			{
+				aid.add(data.getInt("aid")); 
+				numbers.add(data.getInt("accountnumber"));
+			}
+			
+			System.out.print("phasers locked and loaded, are you sure you want to do this?(y/n):");
+			String destroy = DeletionCheck.next();
+			
+			if(destroy.equalsIgnoreCase("y"))
+			{
+				for(int i = 0; i < aid.size();i++)
+				{
+					state.execute("delete from accounts where aid = " + aid.get(i) + ";"
+							+" delete from accounts where aid = " + aid.get(i));
+					
+				}
+				state.execute("delete from users where user = " +"'" + choice + "'");
+			}
+			
+			System.out.println("tango down");
+			
+				
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
 		}
-		delete.close();
+		catch(InputMismatchException i)
+		{
+			System.out.println("please enter valid choices, returning to option select.");
+		}
+
 	}
 	
 	public void MakeEmployee(Statement state)

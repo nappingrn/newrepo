@@ -1,13 +1,11 @@
 package Accounts;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Scanner;
+
+// this shit is heat, no real way to super bust it up since i only exact match this jank
 
 public class employee extends Account { // btw admin should extend off this
 	
@@ -83,8 +81,6 @@ public class employee extends Account { // btw admin should extend off this
 			}
 		}
 		catch(Exception e) {e.printStackTrace();}
-		
-		
 		
 	}
 

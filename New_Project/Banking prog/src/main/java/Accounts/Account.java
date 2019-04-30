@@ -14,7 +14,7 @@ public class Account {
 	
 	public Account()
 	{
-		System.out.println("here1");
+		
 	}
 	
 	public Account(String User, String Password, Statement state) {
@@ -33,7 +33,7 @@ public class Account {
 				if(getStatus.next())
 				{
 					this.Approval = getStatus.getString("status");
-					System.out.println(this.Approval);
+					System.out.println("your account type is " + this.Approval);
 				}
 			} catch (SQLException e) {e.printStackTrace();}
 			
