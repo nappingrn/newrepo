@@ -20,10 +20,10 @@ public class logon_creds {
 				if (in.equalsIgnoreCase("y"))
 				{
 					
-					System.out.println("Welcome Returning User!");
-					System.out.print("Enter Username: ");
+					System.out.println("| Welcome Returning User!");
+					System.out.print("| Enter Username: ");
 					Username = userInput.readLine();
-					System.out.print("Enter Password: ");
+					System.out.print("| Enter Password: ");
 					Password = userInput.readLine();
 					
 					
@@ -34,7 +34,7 @@ public class logon_creds {
 							}
 					else
 					{
-						System.out.println("Invalid Credentials");
+						System.out.println("| Invalid Credentials");
 					}
 				}
 				else if(in.equalsIgnoreCase("n"))
@@ -96,26 +96,28 @@ public class logon_creds {
 			}
 			else if(Choice.equalsIgnoreCase("j"))
 			{
-				System.out.println("The Rules for creation are as follows:"
-						+"\n - Only alphanumeric characters(a-z) or (0-9)"
-						+ "\n - No more than 32 characters are allowed in Username"
-						+ "\n The Same length restrictions are used for passwords");
+				System.out.println("\n|____________________[Rules for Account Creation]_______________________|"
+						+ "\n| 1) Only alphanumeric characters [(a-z)"
+						+ " or (0-9)] 			|\n| 2) No more than 32 character are allowed in your Username		| \n"
+						+ "| 3) The same length restriction applies for Password.			|"
+						+ "\n| 4) usernames can NOT be the same.                                     |");
+						System.out.println("|_______________________________________________________________________|");
 				
-				System.out.println("What would you like your first account name to be? : ");
+				System.out.println("| What would you like your first account name to be? : ");
 				String TestUser = getDetails.nextLine();
-				System.out.println("Enter first password : ");
+				System.out.println("| Enter first password : ");
 				String TestPass = getDetails.nextLine();
 
-				System.out.println("What would you like your second account name to be? : ");
+				System.out.println("| What would you like your second account name to be? : ");
 				String TestUser2 = getDetails.nextLine();
-				System.out.println("Enter second password : ");
+				System.out.println("| Enter second password : ");
 				String TestPass2 = getDetails.nextLine();
 				
 
 				if( TestUser.matches("[a-zA-Z0-9]+") && TestPass.matches("[a-zA-Z0-9]+") && // check 4 char seq
 					TestUser2.matches("[a-zA-Z0-9]+") && TestPass2.matches("[a-zA-Z0-9]+") &&
 					TestUser.length() <= 32 && TestPass.length() <= 32 && // check 4 length
-					TestUser2.length() <= 32 && TestPass2.length() <= 32 )
+					TestUser2.length() <= 32 && TestPass2.length() <= 32 && (TestUser.equals(TestUser2) != true) )
 				{
 				
 				

@@ -30,25 +30,35 @@ public class Admin extends employee{
 		int account = s1.nextInt();
 		System.out.print("| How much would you like to from account " + account +" : ");
 		double amount = s1.nextDouble();
+		double checkAmount = 0;
 		
-		if(amount >=0)
+		ResultSet checkAcc = state.executeQuery("select amount where accountnumber = " + account);
+		
+		if(checkAcc.next())
+		{
+			checkAmount = checkAcc.getDouble("amount");
+		}
+		
+		
+		if(amount >=0 && amount <= checkAmount)
 		{
 			state.execute("update accounts set amount = amount - " + amount+ " where accountnumber = " + account);
 			System.out.println("| Withdrew " + amount + " from account--->" + account);
-			System.out.println("|__________________________________________________________________________\n");
+			System.out.println("|_________________________________________________________________________________________\n");
 		}
 		else 
 		{
-			System.out.println("| you cannot withdraw negative values");
-			System.out.println("|__________________________________________________________________________\n");
+			System.out.println("| you cannot withdraw negative values or values greater than the one in the account");
+			System.out.println("|__________________________________________________________________________________________\n");
 		}
 		
 		} catch (SQLException e) {e.printStackTrace();}
-		catch(InputMismatchException i) {
+		catch(InputMismatchException i)
+		{
 			System.out.println("| Please follow the directions and enter in valid doubles\n"
 					+ "| and valid account numbers. returning to options menu");
 			System.out.println("|__________________________________________________________________________\n");
-			}
+		}
 		
 	}
 	
@@ -98,41 +108,34 @@ public class Admin extends employee{
 		
 		System.out.println("\n__________________________[Table of Users]______________________________");
 		ShowAll(state);
-		System.out.println("__________________________________________________________________________\n");
+		System.out.println("|__________________________________________________________________________\n");
 		
 		System.out.println("which account number would you like to transfer funds out of? : ");
 		
 		try {
-			ResultSet AccNumbers = state.executeQuery("select accountnumber,amount "
-													+ "from users,accounts,usersaccount "
-													+ "where users.uid = usersaccount.uid "
-														+ "and accounts.aid = usersaccount.aid "
-														);
+			ResultSet AccNumbers = state.executeQuery("select accountnumber,amount "+ "from users,accounts,usersaccount "
+			+ "where users.uid = usersaccount.uid "+ "and accounts.aid = usersaccount.aid ");
+			
 			while(AccNumbers.next() == true)
 			{
 				numbers.add(AccNumbers.getInt("accountnumber"));
 				amounts.add(AccNumbers.getDouble("amount"));
 			}
 			
-		
-		
 		Scanner S1 = new Scanner(System.in);
-		
-		
 		int accountToTransfer = S1.nextInt();
 		
-		
-		System.out.println("how much would you like to transfer out?: ");
+		System.out.println("| how much would you like to transfer out?: ");
 		int amountToTransfer = S1.nextInt();
 		
 		if(amountToTransfer <0 || amounts.get(numbers.indexOf(accountToTransfer)) < amountToTransfer )
 		{
-			System.out.println("you must enter a positive sum which must not be greater than your accout total.");
+			System.out.println("| you must enter a positive sum which must not be greater than your accout total.");
 			return;
 		}
 		
 		
-		System.out.println("to what account do you want to transfer these funds? ");
+		System.out.println("| to what account do you want to transfer these funds:  ");
 		
 		int targetAccount = S1.nextInt();
 		boolean valid = false;
@@ -157,11 +160,11 @@ public class Admin extends employee{
 		}
 		else
 		{
-			System.out.println("incorrect target account selected, please try again.");
+			System.out.println("| Incorrect target account selected, please try again.");
 		}
 		
 		} catch (SQLException e) {e.printStackTrace();}
-		catch(InputMismatchException i) {System.out.println("Please use valid credentials next time, quitting.");}
+		catch(InputMismatchException i) {System.out.println("| Please use valid credentials next time, quitting.");}
 	}
 	
 	
@@ -170,7 +173,7 @@ public class Admin extends employee{
 		ShowAll(state);
 		Scanner DeletionCheck = new Scanner(System.in);
 		
-		System.out.println("which user is to be deleted out of this list? : ");
+		System.out.print("| Which user is to be deleted out of this list : ");
 		try {
 		String choice = DeletionCheck.next();
 		
@@ -198,7 +201,7 @@ public class Admin extends employee{
 				numbers.add(data.getInt("accountnumber"));
 			}
 			
-			System.out.print("| phasers locked and loaded, are you sure you want to do this?(y/n):");
+			System.out.print("| Phasers locked and loaded, are you sure you want to do this?(y/n):");
 			String destroy = DeletionCheck.next();
 			
 			if(destroy.equalsIgnoreCase("y"))
@@ -214,7 +217,7 @@ public class Admin extends employee{
 			}
 			else
 			{
-				System.out.println("deletion cancelled");
+				System.out.println("| deletion cancelled");
 			}
 			
 			System.out.println("|________________________________________________________________");

@@ -171,7 +171,7 @@ public class Account {
 			check = state.executeQuery("select name,pass from users where name = " + "'"+
 					Username + "' " + "and pass = " + "'"+ Password + "'"); // attempt to select entry from users
 			
-			System.out.println("\nAttempting to log in");
+			System.out.println("\n| Attempting to log in");
 			return check.next();
 			
 		} catch (SQLException e) {e.printStackTrace();} 
@@ -202,14 +202,12 @@ public class Account {
 			while(ListAccounts.next() == true)
 			{
 				values.add(ListAccounts.getInt("Accountnumber"));
-				System.out.println("account number " +ListAccounts.getInt("Accountnumber") );
+				System.out.println("account number " + ListAccounts.getInt("Accountnumber") );
 			}
-			System.out.println("____________________________________________________________________");
+			System.out.println("|___________________________________________________________________");
 			
 			
-		} catch (SQLException e1) {
-			e1.printStackTrace();
-		}
+		
 		System.out.print("| which account would you like to deposit it in: " );
 		int choice = S1.nextInt();
 		
@@ -217,7 +215,7 @@ public class Account {
 		{
 			try {
 				state.execute("UPDATE accounts SET amount = amount + " + UserAmount +" WHERE accountnumber = " + choice);
-				System.out.println("nice! just deposited " + UserAmount + " into account " + choice+ "!");
+				System.out.println("nice! just deposited " + UserAmount + " dollars into account " + choice+ "!");
 				return;
 			} catch (SQLException e) {e.printStackTrace();} 
 		}
@@ -226,6 +224,8 @@ public class Account {
 			System.out.println("| must deposit an amount >=0 and choose a proper account number");
 			System.out.println("|__________________________________________________________________________\n");
 		}
+		} catch (SQLException e1) {e1.printStackTrace();}
+		catch(InputMismatchException i) {System.out.println("Improper input entered.");}
 	}
 	
 	public boolean Withdraw(Statement state) {
@@ -234,7 +234,7 @@ public class Account {
 		ArrayList<Integer> values = new ArrayList<>();
 		Scanner s1 = new Scanner(System.in);
 		
-		System.out.println("------------------Your list of accounts and their amounts--------------------");
+		System.out.println("|------------------Your list of accounts and their amounts--------------------|");
 		try {
 			
 			ListAccounts = state.executeQuery("Select Accountnumber,amount "
@@ -247,14 +247,13 @@ public class Account {
 				int accountnumber = ListAccounts.getInt("accountnumber");
 				double amount = ListAccounts.getDouble("amount");
 				values.add(accountnumber);
-				System.out.println("| Account Number [" + accountnumber + "]: has " + amount + "dollars");
+				System.out.println("| Account Number [" + accountnumber + "]: has " + amount + " dollars");
 				
 			}
 			
 			
-		} catch (SQLException e1) {e1.printStackTrace();
-		}
-		System.out.println("_____________________________________________________________________________");
+
+		System.out.println("|____________________________________________________________________________");
 		
 		
 		System.out.print("| Which one of your account numbers would you like to withdraw from: ");
@@ -269,13 +268,13 @@ public class Account {
 		} catch (SQLException e1) {e1.printStackTrace();}
 		
 		
-		System.out.println("| how much would you like to withdraw: ");
+		System.out.print("| how much would you like to withdraw: ");
 		
 		// use returning at the end of queries to return the value just written
 		
 		double amountToTake = s1.nextDouble();
 		
-		if(amountToTake >=0 && values.contains(numberToUse) && amountToTake <= amountInAccount)
+		if(amountToTake >=0 && values.contains(numberToUse) && amountToTake <= amountInAccount && amountToTake%(.01) == 0)
 		{
 			try {
 				state.execute("UPDATE accounts SET amount =" + (amountInAccount - amountToTake) +
@@ -290,13 +289,15 @@ public class Account {
 			System.out.println("|____________________________________________________________________________________");
 			return false;
 		}
-		
+		} catch (SQLException e1) {e1.printStackTrace();}
+		catch(InputMismatchException i) {System.out.println("improper input entered.");}
 
+		return false;
 	}
 	
 	public void TransferFunds(Statement state)
 	{
-		System.out.println("which account would you like to transfer funds out of? : ");
+		System.out.println("| Which account would you like to transfer funds out of : ");
 		ArrayList<Integer> numbers = new ArrayList<Integer>();
 		ArrayList<Double> amounts = new ArrayList<Double>();
 		
@@ -321,23 +322,23 @@ public class Account {
 		
 		if(numbers.contains(accountToTransfer) == false)
 		{
-			System.out.println("you must use your own account as the source of the funds.");
+			System.out.println("| You must use your own account as the source of the funds.");
 			S1.close();
 			return;
 		}
 		
-		System.out.println("how much would you like to transfer out?: ");
+		System.out.println("| how much would you like to transfer out?: ");
 		int amountToTransfer = S1.nextInt();
 		
 		if(amountToTransfer <0 || amounts.get(numbers.indexOf(accountToTransfer)) < amountToTransfer )
 		{
-			System.out.println("you must enter a positive sum which must not be greater than your accout total.");
+			System.out.println("| You must enter a positive sum which must not be greater than your accout total.");
 			S1.close();
 			return;
 		}
 		
 		
-		System.out.println("to what account do you want to transfer these funds? ");
+		System.out.println("| To what account do you want to transfer these funds: ");
 		
 		int targetAccount = S1.nextInt();
 		boolean valid = false;
@@ -362,10 +363,10 @@ public class Account {
 		}
 		else
 		{
-			System.out.println("incorrect target account selected, please try again.");
+			System.out.println("| Incorrect target account selected, please try again.");
 		}
 		} catch (SQLException e) {e.printStackTrace();}
-		catch(InputMismatchException i) {System.out.println("invalid input entered, returning.");}
+		catch(InputMismatchException i) {System.out.println("| invalid input entered, returning.");}
 		
 	}
 	

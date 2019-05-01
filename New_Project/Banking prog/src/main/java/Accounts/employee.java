@@ -18,14 +18,14 @@ public class employee extends Account { // btw admin should extend off this
 	{
 		
 		Scanner s1 = new Scanner(System.in);	
-		System.out.println("would you like to approve(a) or deny (d) an account: ");
+		System.out.print("| Would you like to approve(a) or deny (d) an account: ");
 		
 		String approval = s1.next();
 		
 		if(approval.equalsIgnoreCase("a"))
 		{
 		ListUsers(state);
-		System.out.print("what is the username that you would like to approve for use?: ");
+		System.out.print("| What is the username that you would like to approve for use?: ");
 		String choice = s1.next().trim();
 		
 		
@@ -40,7 +40,7 @@ public class employee extends Account { // btw admin should extend off this
 		else if (approval.equalsIgnoreCase("d"))
 		{
 			ListUsers(state);
-			System.out.print("what is the username that you would like to deny: ");
+			System.out.print("| What is the username that you would like to deny: ");
 			String choice = s1.next().trim();
 			
 			
@@ -54,7 +54,7 @@ public class employee extends Account { // btw admin should extend off this
 		}
 		else
 		{
-			System.out.println("improper choice entered");
+			System.out.println("| Improper choice entered");
 		}
 		
 	}
@@ -74,7 +74,7 @@ public class employee extends Account { // btw admin should extend off this
 				int accountnumber = notApproved.getInt("Accountnumber");
 				double useramount = notApproved.getDouble("amount");
 				
-				System.out.println("Row " + i + " | username: " + user + " |  status: " + status
+				System.out.println("| Row " + i + " | username: " + user + " |  status: " + status
 						+" |  accountnumber: " + accountnumber + " | Amount in account " + useramount );
 				i++;
 				
