@@ -22,18 +22,32 @@ public class Admin extends employee{
 	{
 		try {
 		Scanner s1 = new Scanner(System.in);
+		System.out.println("\n__________________________[Table of Users]_________________________________________");
 		ShowAll(state);
-		System.out.println("which account number do you want to withdraw from? : ");
+		System.out.println("|____________________________________________________________________________________");
+
+		System.out.print("| Which account number do you want to withdraw from : ");
 		int account = s1.nextInt();
-		System.out.println("how much would you like to withdraw? : ");
+		System.out.print("| How much would you like to from account " + account +" : ");
 		double amount = s1.nextDouble();
 		
-		
+		if(amount >=0)
+		{
 			state.execute("update accounts set amount = amount - " + amount+ " where accountnumber = " + account);
+			System.out.println("| Withdrew " + amount + " from account--->" + account);
+			System.out.println("|__________________________________________________________________________\n");
+		}
+		else 
+		{
+			System.out.println("| you cannot withdraw negative values");
+			System.out.println("|__________________________________________________________________________\n");
+		}
+		
 		} catch (SQLException e) {e.printStackTrace();}
 		catch(InputMismatchException i) {
-			System.out.println("please follow the directions and enter in valid doubles\n"
-					+ "and account numbers. returning to options menu");
+			System.out.println("| Please follow the directions and enter in valid doubles\n"
+					+ "| and valid account numbers. returning to options menu");
+			System.out.println("|__________________________________________________________________________\n");
 			}
 		
 	}
@@ -44,21 +58,23 @@ public class Admin extends employee{
 		try {
 			
 		Scanner s1 = new Scanner(System.in);
+		
+		System.out.println("\n__________________________[Table of Users]_________________________________________");
 		ShowAll(state);
-		System.out.println("which account number do you want to deposit into? : ");
+		System.out.println("|____________________________________________________________________________________");
+		
+		System.out.print("| which account number do you want to deposit into? : ");
 		int account = s1.nextInt();
-		System.out.println("how much would you like to deposit? : ");
+		System.out.print("| how much would you like to deposit? : ");
 		double amount = s1.nextDouble();
 
-		
-			
 		if(amount>=0)
 		{
 			state.execute("update accounts set amount = amount + " + amount+ " where accountnumber = " + account);
 		}
 		else
 		{
-			System.out.println("Please dont enter negative numbers.");
+			System.out.println("| Please dont enter negative numbers.");
 			return;
 		}
 		
@@ -68,7 +84,8 @@ public class Admin extends employee{
 		}
 		catch(InputMismatchException i)
 		{
-			System.out.println("next time please enter a valid account number, returning to select screen");
+			System.out.println("| next time please enter a valid account number, returning to select screen");
+			System.out.println("|____________________________________________________________________________________");
 		}
 	
 	}
@@ -76,12 +93,12 @@ public class Admin extends employee{
 	
 	public void transferAdmin(Statement state)
 	{
-		
-		
 		ArrayList<Integer> numbers = new ArrayList<Integer>();
 		ArrayList<Double> amounts = new ArrayList<Double>();
 		
+		System.out.println("\n__________________________[Table of Users]______________________________");
 		ShowAll(state);
+		System.out.println("__________________________________________________________________________\n");
 		
 		System.out.println("which account number would you like to transfer funds out of? : ");
 		
@@ -172,7 +189,6 @@ public class Admin extends employee{
 				aid.add(data.getInt("aid")); // we can load in the first account ID
 				uid = data.getInt("uid"); // the user id will never change since its just 1 user
 				numbers.add(data.getInt("accountnumber")); // load the first accountnumber as well
-				
 			}
 			
 			
@@ -182,7 +198,7 @@ public class Admin extends employee{
 				numbers.add(data.getInt("accountnumber"));
 			}
 			
-			System.out.print("phasers locked and loaded, are you sure you want to do this?(y/n):");
+			System.out.print("| phasers locked and loaded, are you sure you want to do this?(y/n):");
 			String destroy = DeletionCheck.next();
 			
 			if(destroy.equalsIgnoreCase("y"))
@@ -194,11 +210,14 @@ public class Admin extends employee{
 					
 				}
 				state.execute("delete from users where user = " +"'" + choice + "'");
+				System.out.println("| tango down");
+			}
+			else
+			{
+				System.out.println("deletion cancelled");
 			}
 			
-			System.out.println("tango down");
-			
-				
+			System.out.println("|________________________________________________________________");
 			
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
@@ -206,14 +225,16 @@ public class Admin extends employee{
 		}
 		catch(InputMismatchException i)
 		{
-			System.out.println("please enter valid choices, returning to option select.");
+			System.out.println("|please enter valid choices, returning to option select.");
+			System.out.println("|________________________________________________________________|");
 		}
 
 	}
 	
+	
 	public void MakeEmployee(Statement state)
 	{
-		System.out.print("who would you like to make an employee?");
+		System.out.print("| who would you like to make an employee: ");
 		Scanner S1 = new Scanner(System.in);
 		String newEmployee = S1.next();
 		
@@ -234,9 +255,9 @@ public class Admin extends employee{
 					+ "where users.UID = usersaccount.UID  and accounts.AID = usersaccount.AID");
 			while(allusers.next())
 			{
-				System.out.println(" Name: " + allusers.getString("name") + " |  status: " 
-			+ allusers.getString("status") + " | amount in account: " + allusers.getDouble("amount")
-			+ " | Accountnumber: " + allusers.getInt("accountnumber"));
+				System.out.println("| Name: " + allusers.getString("name") + " \t\t|status:" 
+			+ allusers.getString("status") + "\t\t|amount in account: " + allusers.getDouble("amount")
+			+ "\t\t|Accountnumber: " + allusers.getInt("accountnumber"));
 
 			}
 		} catch (SQLException e) {e.printStackTrace();}

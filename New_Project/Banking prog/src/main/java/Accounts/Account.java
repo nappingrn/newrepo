@@ -25,7 +25,8 @@ public class Account {
 		if (logon(User,Password,state))
 		{	
 			this.Username = User;
-			System.out.println("logged in");
+			System.out.println("logged in[x]");
+			System.out.println("------------------------------------------------------------------------");
 			
 			try 
 			{
@@ -33,7 +34,8 @@ public class Account {
 				if(getStatus.next())
 				{
 					this.Approval = getStatus.getString("status");
-					System.out.println("your account type is " + this.Approval);
+					System.out.println("Your account's Status is ----> [" + this.Approval + "]");
+					System.out.println("------------------------------------------------------------------------");
 				}
 			} catch (SQLException e) {e.printStackTrace();}
 			
@@ -52,10 +54,10 @@ public class Account {
 	
 	public void CreateAccount(String User, String Pass, Statement state)
 	{
-		System.out.println("Starting new account creation process...");
+		System.out.println("| Starting new account creation process...");
 		ResultSet look;
 		try {
-		System.out.println("attempting creation");
+		System.out.println("| Attempting Creation...");
 		if(validate(User,state) == true) // if there is no first entry, then the username is not in use
 		{
 			this.Username = User;
@@ -81,9 +83,13 @@ public class Account {
 			state.execute("insert into usersaccount(uid,aid) values" + " (" + newUID + "," + newAID+")"); // use both IDs to create an entry in the join table
 			
 			logon(User, Pass, state);
-			System.out.println("new account creation complete");
+			System.out.println("| new account creation complete, re-run and sign in!");
+			System.out.println("|______________________________________________________________________");
 		}
-		else {System.out.println("username given is already in use");}
+		else {
+			System.out.println("| username given is already in use");
+			System.out.println("|______________________________________________________________________");
+		}
 		
 		} catch (SQLException e) {e.printStackTrace();}
 		
@@ -96,6 +102,7 @@ public class Account {
 			{
 				if(status.equals("admin"))
 				{
+					System.out.println("[Using Admin transfer function]");
 					Admin makeEmployee = new Admin();
 					makeEmployee.depositAdmin(state);
 					return;
@@ -106,6 +113,7 @@ public class Account {
 			{
 				if(status.equals("admin"))
 				{
+					System.out.println("[Using Admin withdraw function]");
 					Admin makeEmployee = new Admin();
 					makeEmployee.withdrawAdmin(state);
 					return;
@@ -116,6 +124,7 @@ public class Account {
 			{
 				if(status.equals("admin"))
 				{
+					System.out.println("[Using admin deposit function]");
 					Admin makeEmployee = new Admin();
 					makeEmployee.transferAdmin(state);
 					return;
@@ -149,7 +158,8 @@ public class Account {
 			}
 			else if (choice.equalsIgnoreCase("quit"))
 			{
-				System.out.println("logging out, goodbye.");
+				System.out.println("| Logging out, goodbye.");
+				System.out.println("|__________________________________________________________________________\n");
 			}
 			
 	}
@@ -161,7 +171,7 @@ public class Account {
 			check = state.executeQuery("select name,pass from users where name = " + "'"+
 					Username + "' " + "and pass = " + "'"+ Password + "'"); // attempt to select entry from users
 			
-			System.out.println("\nattempted to log in");
+			System.out.println("\nAttempting to log in");
 			return check.next();
 			
 		} catch (SQLException e) {e.printStackTrace();} 
@@ -176,12 +186,11 @@ public class Account {
 	{
 		@SuppressWarnings("resource")
 		Scanner S1 = new Scanner(System.in);
-		System.out.print("how much would you like to deposit into your account? :");
+		System.out.print("| How much would you like to deposit into your account :");
 		double UserAmount = S1.nextDouble();
 		
 		
 		ArrayList<Integer> values = new ArrayList<>();
-		
 		
 		
 		try {
@@ -189,19 +198,19 @@ public class Account {
 			+ "from users,accounts,usersaccount where users.UID = usersaccount.uid "
 			+ "and accounts.AID = usersaccount.aid and users.name = " + "'" + this.Username + "'");
 			
-			System.out.println("------------------------your accounts------------------------------");
+			System.out.println("_______________________Your Accounts_______________________________");
 			while(ListAccounts.next() == true)
 			{
 				values.add(ListAccounts.getInt("Accountnumber"));
 				System.out.println("account number " +ListAccounts.getInt("Accountnumber") );
 			}
-			System.out.println("-------------------------------------------------------------------");
+			System.out.println("____________________________________________________________________");
 			
 			
 		} catch (SQLException e1) {
 			e1.printStackTrace();
 		}
-		System.out.print("which account would you like to deposit it in?: " );
+		System.out.print("| which account would you like to deposit it in: " );
 		int choice = S1.nextInt();
 		
 		if(Amount>=0 && values.contains(choice)) //validate deposit amount and account number.
@@ -214,7 +223,8 @@ public class Account {
 		}
 		else
 		{
-			System.out.println("must deposit an amount >=0 and choose a proper account number");
+			System.out.println("| must deposit an amount >=0 and choose a proper account number");
+			System.out.println("|__________________________________________________________________________\n");
 		}
 	}
 	
@@ -237,17 +247,17 @@ public class Account {
 				int accountnumber = ListAccounts.getInt("accountnumber");
 				double amount = ListAccounts.getDouble("amount");
 				values.add(accountnumber);
-				System.out.println("account number " + accountnumber + ": has " + amount);
+				System.out.println("| Account Number [" + accountnumber + "]: has " + amount + "dollars");
 				
 			}
 			
 			
 		} catch (SQLException e1) {e1.printStackTrace();
 		}
-		System.out.println("------------------------------------------------------------------");
+		System.out.println("_____________________________________________________________________________");
 		
 		
-		System.out.print("Which one of your account numbers would you like to withdraw from?: ");
+		System.out.print("| Which one of your account numbers would you like to withdraw from: ");
 		int numberToUse = s1.nextInt();
 		double amountInAccount = 0;
 		try {
@@ -259,7 +269,7 @@ public class Account {
 		} catch (SQLException e1) {e1.printStackTrace();}
 		
 		
-		System.out.println("how much would you like to withdraw: ");
+		System.out.println("| how much would you like to withdraw: ");
 		
 		// use returning at the end of queries to return the value just written
 		
@@ -276,7 +286,8 @@ public class Account {
 		}
 		else
 		{
-			System.out.println("improper account number or improper amount entered, returning to home screen.");
+			System.out.println("| Improper account number or improper amount entered, returning to home screen.");
+			System.out.println("|____________________________________________________________________________________");
 			return false;
 		}
 		

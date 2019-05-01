@@ -20,10 +20,10 @@ public class logon_creds {
 				if (in.equalsIgnoreCase("y"))
 				{
 					
-					System.out.println("Welcome Returning user!");
-					System.out.print("enter username: ");
+					System.out.println("Welcome Returning User!");
+					System.out.print("Enter Username: ");
 					Username = userInput.readLine();
-					System.out.print("enter Password: ");
+					System.out.print("Enter Password: ");
 					Password = userInput.readLine();
 					
 					
@@ -34,19 +34,20 @@ public class logon_creds {
 							}
 					else
 					{
-						System.out.println("invalid Credentials");
+						System.out.println("Invalid Credentials");
 					}
 				}
 				else if(in.equalsIgnoreCase("n"))
 				{
 					
-					System.out.println("would you like to make a single(S) or joint account?(J)");
+					System.out.print("| Would you like to make a |Single (S)| or |Joint(J)| account: ");
 					choice = userInput.readLine();
+					System.out.println("\n|-------------------[Starting Account Creation Process]-----------------|");
 					MakeAccount(choice, state);
 				}
 				else
 				{
-					System.out.println("you have made an incorrect choice.");
+					System.out.println("You have made an incorrect choice for account type.");
 				}
 			}
 			catch(Exception e)
@@ -61,13 +62,18 @@ public class logon_creds {
 			Scanner getDetails = new Scanner(System.in);
 			if(Choice.equalsIgnoreCase("s"))
 			{
-				System.out.println("The Rules for creation are as follows:\n - only alphanumeric characters(a-z)"
-				+ " or (0-9) \n - no more than 32 char user names \n same length restriction goes for passwords");
+				System.out.println("\n|____________________[Rules for Account Creation]_______________________|"
+				+ "\n| 1) Only alphanumeric characters [(a-z)"
+				+ " or (0-9)] 			|\n| 2) No more than 32 character are allowed in your Username		| \n"
+				+ "| 3) The same length restriction applies for Password.			|");
+				System.out.println("|_______________________________________________________________________|");
 				
-				System.out.println("so, what would you like your account name to be?");
+				System.out.print("| What would you like your account name to be : ");
 				String TestUser = getDetails.nextLine();
-				System.out.println("enter password");
+				System.out.print("| What would you like your account password to be : ");
 				String TestPass = getDetails.nextLine();
+		
+				System.out.println("|_______________________________________________________________________|");
 				
 				if(TestUser.matches("[a-zA-Z0-9]+") && TestPass.matches("[a-zA-Z0-9]+") && //check for char seq
 				   TestUser.length() <= 32 && TestPass.length() <= 32 ) // check for length
@@ -82,8 +88,8 @@ public class logon_creds {
 				}
 				else
 				{
-					System.out.println("the credntials that you have typed do not follow the rules that"
-							+"/n i have just stated. try again kiddo.");
+					System.out.println("|___________________________________________________________________");
+					System.out.println("|The credentials entered do not follow the aforementioned rules");
 					return;
 				}
 				
@@ -91,18 +97,18 @@ public class logon_creds {
 			else if(Choice.equalsIgnoreCase("j"))
 			{
 				System.out.println("The Rules for creation are as follows:"
-						+"\n - only alphanumeric characters(a-z) or (0-9)"
-						+ "\n - no more than 32 char user names"
-						+ "\n same length and char restrictions are used for passwords");
+						+"\n - Only alphanumeric characters(a-z) or (0-9)"
+						+ "\n - No more than 32 characters are allowed in Username"
+						+ "\n The Same length restrictions are used for passwords");
 				
-				System.out.println("what would you like your first account name to be? : ");
+				System.out.println("What would you like your first account name to be? : ");
 				String TestUser = getDetails.nextLine();
-				System.out.println("enter first password : ");
+				System.out.println("Enter first password : ");
 				String TestPass = getDetails.nextLine();
 
-				System.out.println("what would you like your second account name to be? : ");
+				System.out.println("What would you like your second account name to be? : ");
 				String TestUser2 = getDetails.nextLine();
-				System.out.println("enter second password : ");
+				System.out.println("Enter second password : ");
 				String TestPass2 = getDetails.nextLine();
 				
 
@@ -121,8 +127,7 @@ public class logon_creds {
 				}
 				else
 				{
-					System.out.println("the credentials that you have typed do not follow the rules that"
-							+"/n i have just stated. try again kiddo.");
+					System.out.println("| The credentials entered do not follow the aforementioned rules.");
 					return;
 				}
 
@@ -130,13 +135,14 @@ public class logon_creds {
 			else if(Choice.equalsIgnoreCase("quit"))
 			{
 				getDetails.close();
-				System.out.println("qutting application.");
+				System.out.println("| Logging off, Goodbye!");
+				System.out.println("________________________________________________________________");
 				System.exit(0);
 			}
 			else
 			{
 				getDetails.close();
-				System.out.println("incorrect choice");
+				System.out.println("| An incorrect choice has been entered.");
 				return;
 			}
 			getDetails.close();
